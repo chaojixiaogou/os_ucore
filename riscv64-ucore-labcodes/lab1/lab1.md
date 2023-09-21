@@ -15,8 +15,9 @@
 **要求完成问题 1 提出的相关函数实现，提交改进后的源代码包（可以编译执行），并在实验报告中简要说明实现过程和定时器中断中断处理的流程。实现要求的部分代码后，运行整个系统，大约每 1 秒会输出一次”100 ticks”，输出 10 行。** 
 
 在注释后添加的代码为：
+```
 
-clock_set_next_event();
+      clock_set_next_event();
 
 ​      ticks++;
 
@@ -35,7 +36,7 @@ clock_set_next_event();
 ​        sbi_shutdown();
 
 ​      }
-
+```
  
 
  
@@ -107,17 +108,15 @@ sscratch 寄存器是 RISC-V 架构中的一个特殊寄存器，通常用于保
 
 在注释后添加的两段代码为
 
-```cprintf("Exception type:Illegal instruction\n");
+```
+cprintf("Exception type:Illegal instruction\n");
 cprintf("Illegal instruction caught at %lx\n", tf->epc);
-
 tf->epc += 4;
-
+```
  
-
+```
 cprintf("Exception type: breakpoint\n");
-
 cprintf("ebreak caught at %lx\n", tf->epc);
-
 tf->epc += 4;
 ```
 
