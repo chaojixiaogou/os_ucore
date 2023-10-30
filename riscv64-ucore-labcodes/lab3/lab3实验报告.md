@@ -325,7 +325,7 @@ _clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tic
 
 
 
-**Clock 页替换算法和 FIFO 算法的不同:**clock算法维护的是一个环形链表并且有一个指向当前页面的指针，而FIFO算法维护的为直链链表；而且clock算法中关心每个页面是否被访问过并以此作为是否换出的依据。
+Clock 页替换算法和 FIFO 算法的不同:clock算法维护的是一个环形链表并且有一个指向当前页面的指针，而FIFO算法维护的为直链链表；而且clock算法中关心每个页面是否被访问过并以此作为是否换出的依据。
 
  
 
