@@ -208,7 +208,7 @@ get_pid(void) {
 
  
 
-**练习 3：编写 proc_run 函数（需要编码） **
+**练习 3：编写 proc_run 函数（需要编码）**
 
 `proc_run` 用于将指定的进程切换到 CPU 上运行。它的大致执行步骤包括： 
 
@@ -290,7 +290,7 @@ proc_run(struct proc_struct *proc) {
 
  
 
-扩展练习 Challenge：
+**扩展练习 Challenge：**
 
 • 说明语句`local_intr_save(intr_flag);....local_intr_restore(intr_flag); `是如何实现开关中断的？ 
 
