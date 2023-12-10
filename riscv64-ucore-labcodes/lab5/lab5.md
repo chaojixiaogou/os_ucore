@@ -112,4 +112,4 @@ tf->status = (sstatus & ~SSTATUS_SPP) | SSTATUS_SPIE;
 
  ucore 中一个用户态进程的执行状态生命周期图：
 
-![img](file:///C:/Users/LEGION/AppData/Local/Temp/msohtmlclip1/01/clip_image002.jpg)
+![img](用户态进程的执行状态生命周期图.png)
