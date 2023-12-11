@@ -28,7 +28,7 @@ tf->status = (sstatus & ~SSTATUS_SPP) | SSTATUS_SPIE;
 
  
 
-用户态进程被 ucore 选择占用后，首先会调用switch_to切换上下文，然后通过switch_to中的ret指令跳转到ra寄存器指向的地址，而在copy_thread函数中以将ra寄存器设置为forkret函数的地址，因此会执行forkret函数，转到执行forkrets(current->tf)，然后跳转到__trapret，执行sret指令回到用户态，跳转到pec指向的地址，即设置的elf文件的入口地址，进而在用户态执行应用程序。
+用户态进程被 ucore 选择占用后，首先会调用switch_to切换上下文，然后通过switch_to中的ret指令跳转到ra寄存器指向的地址，而在copy_thread函数中以将ra寄存器设置为forkret函数的地址，因此会执行forkret函数，转到执行forkrets(current->tf)，然后跳转到__trapret，执行sret指令回到用户态，跳转到epc指向的地址，即设置的elf文件的入口地址，进而在用户态执行应用程序。
 
 ### 练习 2: 父进程复制自己的内存空间给子进程（需要编码）
 
