@@ -589,7 +589,7 @@ sfs_io_nolock(struct sfs_fs *sfs, struct sfs_inode *sin, void *buf, off_t offset
     uint32_t blkno = offset / SFS_BLKSIZE;          // The NO. of Rd/Wr begin block
     uint32_t nblks = endpos / SFS_BLKSIZE - blkno;  // The size of Rd/Wr blocks
 
-  //LAB8:EXERCISE1 YOUR CODE HINT: call sfs_bmap_load_nolock, sfs_rbuf, sfs_rblock,etc. read different kind of blocks in file
+  //LAB8:EXERCISE1 2112106 HINT: call sfs_bmap_load_nolock, sfs_rbuf, sfs_rblock,etc. read different kind of blocks in file
 	/*
 	 * (1) If offset isn't aligned with the first block, Rd/Wr some content from offset to the end of the first block
 	 *       NOTICE: useful function: sfs_bmap_load_nolock, sfs_buf_op
@@ -599,7 +599,59 @@ sfs_io_nolock(struct sfs_fs *sfs, struct sfs_inode *sin, void *buf, off_t offset
      * (3) If end position isn't aligned with the last block, Rd/Wr some content from begin to the (endpos % SFS_BLKSIZE) of the last block
 	 *       NOTICE: useful function: sfs_bmap_load_nolock, sfs_buf_op	
 	*/
+    // 处理首块不对齐
+    if (offset % SFS_BLKSIZE != 0) {
+        blkoff = offset % SFS_BLKSIZE;
+        size = (nblks != 0) ? (SFS_BLKSIZE - blkoff) : (endpos - offset);
+        // 调用相应的函数，处理首块不对齐的读取/写入操作
+        ret = sfs_bmap_load_nolock(sfs, sin, blkno, &ino);
+        if (ret != 0) {
+        goto out;
+        }
+        ret = sfs_buf_op(sfs, buf, size, ino, blkoff);
+        if (ret != 0) {
+            goto out;
+        }
+        alen += size;
+        if (nblks == 0) {
+            goto out;
+        }
+        blkno++;
+        buf += size;
+        nblks--;
+    }
 
+    // 处理对齐的块
+    while (nblks > 0) {
+        // 调用相应的函数，处理对齐块的读取/写入操作
+        ret = sfs_bmap_load_nolock(sfs, sin, blkno, &ino);
+        if (ret != 0) {
+            goto out;
+        }
+        ret = sfs_block_op(sfs, buf, ino, 1);
+        if (ret != 0) {
+            goto out;
+        }
+        alen += SFS_BLKSIZE;
+        buf += SFS_BLKSIZE;
+        blkno++;
+        nblks--;
+    }
+
+    // 处理尾块不对齐
+    if (endpos % SFS_BLKSIZE != 0) {
+        size = endpos % SFS_BLKSIZE;
+        // 调用相应的函数，处理尾块不对齐的读取/写入操作
+        ret = sfs_bmap_load_nolock(sfs, sin, blkno, &ino);
+        if (ret != 0) {
+            goto out;
+        }
+        ret = sfs_buf_op(sfs, buf, size, ino, 0);  // 从块的开头开始读取/写入
+        if (ret != 0) {
+            goto out;
+        }
+        alen += size;
+    }
     
 
 out:
